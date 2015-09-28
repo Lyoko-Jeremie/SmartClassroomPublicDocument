@@ -1,0 +1,236 @@
+﻿Json接口文档
+
+
+框架基本结构
+
+接受：
+{
+	"id": ID, // 任务id
+	"info": {	// 任务信息
+		"content": 内容,	// 任务请求附加内容 由type决定
+		"user_id": userID,	// 发起任务的用户id 登录操作时任意填写
+		"session": "session",	// 用户会话 登陆操作时任意填写
+		"type": 0		// 任务类型 说明这是一个什么任务 决定任务附加内容的格式
+	}
+}
+
+
+
+返回：
+{
+	"id": ID, 	// 任务id
+	"info": {	// 任务信息
+		"content":内容,		// 任务执行结果附加内容 由status决定格式
+		"status": 0		// 任务执行结果
+	}
+}
+
+
+
+用户类型定义
+符号名 		可阅读名 		实现中的类型编号（ID）
+unkown 		未知（前置）		32
+（前置用户即为未登录用户，鉴权时不检查框架中的用户ID和session，任意填写但不能不填，可简单设为0和短内容字符串）
+end_user 	最终用户（学生与教师） 	16
+maintainer 	维修人员 		8
+region_admin 	区域管理员（楼管） 	4
+admin 		管理员 			2
+root 		全权管理员		1
+（root管理不应该暴露给最终用户的与系统实现有关的细节设置）
+simple 		简单用户（测试） 	0
+
+
+特别登录限制：
+id小于3的用户类型不能重复登录（先登录用户会被清除会话）
+
+
+
+操作的编号：
+无须用户登录的前置操作编号>=16#40000000（16进制的40000000）
+
+鉴权时 session无效或过期时返回结构：（需要用户重新登录）
+status:16#3FFFFFFF
+content:"用户权限不足"
+
+用户权限与操作匹配失败时返回结构：（这个错误一般是设计错误）
+status:16#7FFFFFFF
+content:"不正确的请求"
+
+注释：
+下面说明中“请求content结构”标注为“不关心”的表示不会检查content但content必须存在（可以直接设为json的null）
+
+
+
+登陆操作：
+编号：16#40000001
+用户身份限制：=32
+请求content结构：{"name":UserName,"password":UserPassword}
+返回：
+status:1 
+content:"没有这个用户"
+status:0
+content:{"id": 用户ID（number）, "nick": Nick昵称, "session": Session（string）, "type": Type用户类型}
+注释：框架中的用户ID和session任意填写但不能不填
+
+
+
+注册操作：
+编号：16#40000002
+用户身份限制：=32
+请求content结构：[{"name", UserName}, {"nick", UserNick}, {"password", UserPassword}]
+（对应真实json：{"name": UserName, "nick": UserNick, "password": UserPassword} ）
+返回：
+status:1
+content:"重名"
+status:0
+content:null
+注释：用户用户名必须唯一 昵称可以重复 用户名、昵称、密码都为字符串
+
+
+
+登出：
+编号：1
+用户身份限制：=<16
+请求content结构：不关心
+返回：
+status:0
+content:null
+注释：
+1登出总是成功的
+2登出所需的信息直接从json框架中获取（操作是直接清除存储的session）
+
+
+
+修改用户身份：
+编号：2
+用户身份限制：=<1
+请求content结构：[{"id", UserId}, {"type", UserType}]
+返回：
+status:1
+content:"失败"
+status:0
+content:null
+注释：不成功 便失败（好像并没有什么不对）
+
+
+获取所有用户：
+编号：3
+用户身份限制：=<2
+请求content结构：不关心
+返回：
+status:0 获取失败时
+content:null
+status:0 成功时
+content:{"user_info_array":{{"id":ID,"name":Name,"nick":Nick,"type":Type},{...},{...},.........}}
+注释：数据库连接发生错误时content:null，成功时返回包含数组的json
+
+
+发布留言：
+编号：4
+用户身份限制：=<32
+请求content结构：[{"id", UserId}, {"name", UserName}, {"message", Message}, {"cid", ControllerId}, {"did", DeviceId}]
+返回：
+status:0
+content:null
+status:1
+content:"异常失败"
+注释：
+
+
+获取最新留言id：
+编号：5
+用户身份限制：=<32
+请求content结构：
+返回：
+status:
+content:
+status:
+content:
+注释：
+
+
+获取显示的留言数量总数：
+编号：6
+用户身份限制：=<32
+请求content结构：
+返回：
+status:
+content:
+status:
+content:
+注释：
+
+
+获取留言第N页的内容（以M条为一页）：
+编号：7
+用户身份限制：=<32
+请求content结构：
+返回：
+status:
+content:
+status:
+content:
+注释：
+
+
+删除（隐藏）指定留言ID的留言：
+编号：8
+用户身份限制：=<2
+请求content结构：
+返回：
+status:
+content:
+status:
+content:
+注释：
+
+
+获取所有指定状态的显示信息：
+编号：9
+用户身份限制：=<32
+请求content结构：
+返回：
+status:
+content:
+status:
+content:
+注释：
+
+
+设定指定ID的留言的状态：
+编号：10
+用户身份限制：=<8
+请求content结构：
+返回：
+status:
+content:
+status:
+content:
+注释：
+
+
+获取数据库所有留言信息：
+编号：11
+用户身份限制：=<1
+请求content结构：
+返回：
+status:
+content:
+status:
+content:
+注释：
+
+
+：
+编号：
+用户身份限制：=<
+请求content结构：
+返回：
+status:
+content:
+status:
+content:
+注释：
+
+
+
