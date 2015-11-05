@@ -5,12 +5,12 @@
 
 接受：
 {
-	"id": ID, // 任务id
+	"id": ID, // 任务id（是一个唯一的序列号，由时间+随机数组成）
 	"info": {	// 任务信息
 		"content": 内容,	// 任务请求附加内容 由type决定
 		"user_id": userID,	// 发起任务的用户id 登录操作时任意填写
 		"session": "session",	// 用户会话 登陆操作时任意填写
-		"type": 0		// 任务类型 说明这是一个什么任务 决定任务附加内容的格式
+		"type": 0		// 任务类型 表明这是一个什么任务 决定任务附加内容的格式   总是为数字
 	}
 }
 
@@ -18,26 +18,26 @@
 
 返回：
 {
-	"id": ID, 	// 任务id
+	"id": ID, 	// 任务id  与上面的一致
 	"info": {	// 任务信息
 		"content":内容,		// 任务执行结果附加内容 由status决定格式
-		"status": 0		// 任务执行结果
+		"status": 0		// 任务执行结果  总是为数字
 	}
 }
 
 
 
 用户类型定义
-符号名 		可阅读名 		实现中的类型编号（ID）
-unkown 		未知（前置）		32
+符号名 		    可阅读名 		    实现中的类型编号（ID）
+unkown 		    未知（前置）		32
 （前置用户即为未登录用户，鉴权时不检查框架中的用户ID和session，任意填写但不能不填，可简单设为0和短内容字符串）
-end_user 	最终用户（学生与教师） 	16
-maintainer 	维修人员 		8
-region_admin 	区域管理员（楼管） 	4
-admin 		管理员 			2
-root 		全权管理员		1
+end_user 	    最终用户（学生与教师） 	16
+maintainer 	    维修人员 		    8
+region_admin 	区域管理员（楼管） 4
+admin 		    管理员 			2
+root 		    全权管理员		1
 （root管理不应该暴露给最终用户的与系统实现有关的细节设置）
-simple 		简单用户（测试） 	0
+simple 		    简单用户（测试） 	0
 
 
 特别登录限制：
@@ -55,6 +55,11 @@ content:"用户权限不足"
 用户权限与操作匹配失败时返回结构：（这个错误一般是设计错误）
 status:16#7FFFFFFF
 content:"不正确的请求"
+
+content结构不正确时返回结构：（这个错误一般是设计错误）
+status:16#5FFFFFFF
+content:"找不到所需的KEY"
+
 
 注释：
 下面说明中“请求content结构”标注为“不关心”的表示不会检查content但content必须存在（可以直接设为json的null）
@@ -137,87 +142,120 @@ content:"异常失败"
 注释：
 
 
-获取最新留言id：
+获取最新留言id（数据库中最大的id号）：
 编号：5
 用户身份限制：=<32
-请求content结构：
+请求content结构：不关心
 返回：
-status:
-content:
-status:
-content:
+status:0
+content:{"max_id", ID}
+status:1
+content:"异常失败"
 注释：
 
 
 获取显示的留言数量总数：
 编号：6
 用户身份限制：=<32
-请求content结构：
+请求content结构：不关心
 返回：
-status:
-content:
-status:
-content:
+status:0
+content:{"count_number", Number}
+status:1
+content:"异常失败"
 注释：
 
 
 获取留言第N页的内容（以M条为一页）：
 编号：7
 用户身份限制：=<32
-请求content结构：
+请求content结构：[{"Nth", N},{"byM", M}]
 返回：
-status:
-content:
-status:
-content:
+status:0
+content:（结果为一个列表，列表中的每一个对象为以下结构）
+[
+  {"id",            Message#message.id},
+  {"userid",        Message#message.userid},
+  {"username",      Message#message.username},
+  {"message",       Message#message.message},
+  {"state",         Message#message.state},
+  {"controllerid",  Message#message.controllerid},
+  {"deviceid",      Message#message.deviceid},
+  {"deleted",       Message#message.deleted}
+]
+
+status:1
+content:"异常失败"
 注释：
 
 
-删除（隐藏）指定留言ID的留言：
+删除（隐藏）（标记为删除）指定留言ID的留言：
 编号：8
 用户身份限制：=<2
-请求content结构：
+请求content结构：{"id", Id}
 返回：
-status:
-content:
-status:
-content:
+status:0
+content:null
+status:1
+content:"异常失败"
 注释：
 
 
 获取所有指定状态的显示信息：
 编号：9
 用户身份限制：=<32
-请求content结构：
+请求content结构：{"state", State}
 返回：
-status:
-content:
-status:
-content:
+status:0
+content:（结果为一个列表，列表中的每一个对象为以下结构）
+[
+  {"id",            Message#message.id},
+  {"userid",        Message#message.userid},
+  {"username",      Message#message.username},
+  {"message",       Message#message.message},
+  {"state",         Message#message.state},
+  {"controllerid",  Message#message.controllerid},
+  {"deviceid",      Message#message.deviceid},
+  {"deleted",       Message#message.deleted}
+]
+
+status:1
+content:"异常失败"
 注释：
 
 
 设定指定ID的留言的状态：
 编号：10
 用户身份限制：=<8
-请求content结构：
+请求content结构：{"id", Id}, {"state", State}
 返回：
-status:
-content:
-status:
-content:
+status:0
+content:null
+status:1
+content:"异常失败"
 注释：
 
 
 获取数据库所有留言信息：
 编号：11
 用户身份限制：=<1
-请求content结构：
+请求content结构：不关心
 返回：
-status:
-content:
-status:
-content:
+status:0
+content:（结果为一个列表，列表中的每一个对象为以下结构）
+[
+  {"id",            Message#message.id},
+  {"userid",        Message#message.userid},
+  {"username",      Message#message.username},
+  {"message",       Message#message.message},
+  {"state",         Message#message.state},
+  {"controllerid",  Message#message.controllerid},
+  {"deviceid",      Message#message.deviceid},
+  {"deleted",       Message#message.deleted}
+]
+
+status:1
+content:"异常失败"
 注释：
 
 
