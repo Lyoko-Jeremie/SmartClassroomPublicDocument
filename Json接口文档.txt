@@ -126,7 +126,7 @@ content:null
 status:0 获取失败时
 content:null
 status:0 成功时
-content:{"user_info_array":{{"id":ID,"name":Name,"nick":Nick,"type":Type},{...},{...},.........}}
+content:{"user_info_array":[{"id":ID,"name":Name,"nick":Nick,"type":Type},{...},{...},.........]}
 注释：数据库连接发生错误时content:null，成功时返回包含数组的json
 
 
@@ -173,16 +173,25 @@ content:"异常失败"
 返回：
 status:0
 content:（结果为一个列表，列表中的每一个对象为以下结构）
-[
-  {"id",            Message#message.id},
-  {"userid",        Message#message.userid},
-  {"username",      Message#message.username},
-  {"message",       Message#message.message},
-  {"state",         Message#message.state},
-  {"controllerid",  Message#message.controllerid},
-  {"deviceid",      Message#message.deviceid},
-  {"deleted",       Message#message.deleted}
-]
+
+{"messages":
+    [
+        {
+            "id":ID,
+            "userid":UserId,
+            "username":UserName,
+            "message":Message,
+            "state":State,
+            "controllerid":ControllerId,
+            "deviceid":DeviceId,
+            "deleted":DeletedFlag
+        },
+        {...},
+        {...},
+        .........
+    ]
+}
+
 
 status:1
 content:"异常失败"
@@ -208,16 +217,24 @@ content:"异常失败"
 返回：
 status:0
 content:（结果为一个列表，列表中的每一个对象为以下结构）
-[
-  {"id",            Message#message.id},
-  {"userid",        Message#message.userid},
-  {"username",      Message#message.username},
-  {"message",       Message#message.message},
-  {"state",         Message#message.state},
-  {"controllerid",  Message#message.controllerid},
-  {"deviceid",      Message#message.deviceid},
-  {"deleted",       Message#message.deleted}
-]
+
+{"messages":
+    [
+        {
+            "id":ID,
+            "userid":UserId,
+            "username":UserName,
+            "message":Message,
+            "state":State,
+            "controllerid":ControllerId,
+            "deviceid":DeviceId,
+            "deleted":DeletedFlag
+        },
+        {...},
+        {...},
+        .........
+    ]
+}
 
 status:1
 content:"异常失败"
@@ -243,16 +260,24 @@ content:"异常失败"
 返回：
 status:0
 content:（结果为一个列表，列表中的每一个对象为以下结构）
-[
-  {"id",            Message#message.id},
-  {"userid",        Message#message.userid},
-  {"username",      Message#message.username},
-  {"message",       Message#message.message},
-  {"state",         Message#message.state},
-  {"controllerid",  Message#message.controllerid},
-  {"deviceid",      Message#message.deviceid},
-  {"deleted",       Message#message.deleted}
-]
+
+{"messages":
+    [
+        {
+            "id":ID,
+            "userid":UserId,
+            "username":UserName,
+            "message":Message,
+            "state":State,
+            "controllerid":ControllerId,
+            "deviceid":DeviceId,
+            "deleted":DeletedFlag
+        },
+        {...},
+        {...},
+        .........
+    ]
+}
 
 status:1
 content:"异常失败"
