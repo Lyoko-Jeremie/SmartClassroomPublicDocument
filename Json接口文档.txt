@@ -82,8 +82,7 @@ content:{"id": 用户ID（number）, "nick": Nick昵称, "session": Session（st
 注册操作：
 编号：16#40000002
 用户身份限制：=32
-请求content结构：[{"name", UserName}, {"nick", UserNick}, {"password", UserPassword}]
-（对应真实json：{"name": UserName, "nick": UserNick, "password": UserPassword} ）
+请求content结构：{"name": UserName,"nick": UserNick,"password": UserPassword}
 返回：
 status:1
 content:"重名"
@@ -109,7 +108,7 @@ content:null
 修改用户身份：
 编号：2
 用户身份限制：=<1
-请求content结构：[{"id", UserId}, {"type", UserType}]
+请求content结构：{"id": UserId, "type": UserType}
 返回：
 status:1
 content:"失败"
@@ -133,7 +132,7 @@ content:{"user_info_array":[{"id":ID,"name":Name,"nick":Nick,"type":Type},{...},
 发布留言：
 编号：4
 用户身份限制：=<32
-请求content结构：[{"id", UserId}, {"name", UserName}, {"message", Message}, {"cid", ControllerId}, {"did", DeviceId}]
+请求content结构：{"id": UserId, "name": UserName, "message": Message, "cid": ControllerId, "did": DeviceId}
 返回：
 status:0
 content:null
@@ -148,7 +147,7 @@ content:"异常失败"
 请求content结构：不关心
 返回：
 status:0
-content:{"max_id", ID}
+content:{"max_id": ID}
 status:1
 content:"异常失败"
 注释：
@@ -160,7 +159,7 @@ content:"异常失败"
 请求content结构：不关心
 返回：
 status:0
-content:{"count_number", Number}
+content:{"count_number": Number}
 status:1
 content:"异常失败"
 注释：
@@ -169,7 +168,7 @@ content:"异常失败"
 获取留言第N页的内容（以M条为一页）：
 编号：7
 用户身份限制：=<32
-请求content结构：[{"Nth", N},{"byM", M}]
+请求content结构：{"Nth": N,"byM": M}
 返回：
 status:0
 content:（结果为一个列表）
@@ -201,7 +200,7 @@ content:"异常失败"
 删除（隐藏）（标记为删除）指定留言ID的留言：
 编号：8
 用户身份限制：=<2
-请求content结构：{"id", Id}
+请求content结构：{"id": Id}
 返回：
 status:0
 content:null
@@ -213,7 +212,7 @@ content:"异常失败"
 获取所有指定状态的显示信息：
 编号：9
 用户身份限制：=<32
-请求content结构：{"state", State}
+请求content结构：{"state": State}
 返回：
 status:0
 content:（结果为一个列表）
@@ -244,7 +243,7 @@ content:"异常失败"
 设定指定ID的留言的状态：
 编号：10
 用户身份限制：=<8
-请求content结构：{"id", Id}, {"state", State}
+请求content结构：{"id": Id, "state": State}
 返回：
 status:0
 content:null
