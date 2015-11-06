@@ -172,7 +172,7 @@ content:"异常失败"
 请求content结构：[{"Nth", N},{"byM", M}]
 返回：
 status:0
-content:（结果为一个列表，列表中的每一个对象为以下结构）
+content:（结果为一个列表）
 
 {"messages":
     [
@@ -216,7 +216,7 @@ content:"异常失败"
 请求content结构：{"state", State}
 返回：
 status:0
-content:（结果为一个列表，列表中的每一个对象为以下结构）
+content:（结果为一个列表）
 
 {"messages":
     [
@@ -259,7 +259,7 @@ content:"异常失败"
 请求content结构：不关心
 返回：
 status:0
-content:（结果为一个列表，列表中的每一个对象为以下结构）
+content:（结果为一个列表）
 
 {"messages":
     [
