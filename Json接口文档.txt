@@ -29,6 +29,7 @@
 
 ==================用户类型定义==================
 符号名				可阅读名			实现中的类型编号（ID）
+public_operator     公共操作            32
 unkown				未知（前置）			32		（前置用户即为未登录用户，鉴权时不检查框架中的用户ID和session，任意填写但不能不填，可简单设为0和短内容字符串）
 end_user			最终用户（学生与教师）		16
 maintainer			维修人员			8
@@ -36,6 +37,16 @@ region_admin			区域管理员（楼管）		4
 admin				管理员				2
 root				全权管理员			1		（root管理不应该暴露给最终用户的与系统实现有关的细节设置）
 simple				简单用户（测试）		0
+
+
+
+
+=============留言信息的State字段含义===============
+0 留言     
+1 报修     
+2 已查看的留言     
+3 已经解决的报修
+
 
 
 ==================特别登录限制==================
@@ -143,7 +154,8 @@ content:{"user_info_array":[{"id":ID,"name":Name,"nick":Nick,"type":Type},{...},
 ===================发布留言：
 编号：4
 用户身份限制：=<32
-请求content结构：{"id": UserId, "name": UserName, "message": Message, "cid": ControllerId, "did": DeviceId}
+请求content结构：{"id": UserId, "name": UserName, "message": Message, "cid": ControllerId, "did": DeviceId, "type": 留言类型}
+留言类型: 0 留言    1 报修
 返回：
 status:0
 content:null
@@ -205,7 +217,6 @@ content:（结果为一个列表）
     ]
 }
 
-
 status:1
 content:"异常失败"
 注释：
@@ -228,7 +239,7 @@ content:"异常失败"
 ===================获取所有指定状态的显示信息：
 编号：9
 用户身份限制：=<32
-请求content结构：{"state": State}
+请求content结构：{"state": State}        其中State取值0,1,2,3
 返回：
 status:0
 content:（结果为一个列表）
