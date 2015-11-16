@@ -371,90 +371,133 @@ content:"异常失败"
 
 
 
-===================：
+===================获取未绑定设备列表：
 编号：
 用户身份限制：=<
-请求content结构：
+请求content结构：不关心
 返回：
-status:
-content:
-status:
-content:
+status:0
+content:（结果为一个列表）
+
+{"list":
+    [
+        {
+            "id":RoomID
+        },
+        {...},
+        {...},
+        .........
+    ]
+}
+
+status:1
+content:"异常失败"
+注释：
+其中房间id是1
+
+
+
+
+===================绑定设备：
+编号：
+用户身份限制：=<
+请求content结构：{"roomid": RoomId,"controlid": ControlId}
+返回：
+status:0
+content:null
+status:1
+content:"异常失败"
 注释：
 
 
 
 
 
-===================：
+===================解绑定设备：
 编号：
 用户身份限制：=<
-请求content结构：
+请求content结构：{"controlid": ControlId}
 返回：
-status:
-content:
-status:
-content:
+status:0
+content:null
+status:1
+content:"异常失败"
 注释：
 
 
 
 
 
-===================：
+===================删除房间：
 编号：
 用户身份限制：=<
-请求content结构：
+请求content结构：{"roomid": RoomId}
 返回：
-status:
-content:
-status:
-content:
+status:0
+content:null
+status:1
+content:"异常失败"
 注释：
+会自动解绑定该房间下的所有设备
 
 
 
 
-
-===================：
+===================直接控制设备状态：
 编号：
 用户身份限制：=<
 请求content结构：
+{"control_id":ControlId,"device_id":DevicelId,"device_state":DeviceState,"device_sub_state":DeviceSubState}
 返回：
-status:
-content:
-status:
-content:
+status:0
+content:null
+status:1    分布式层错误
+content:错误原因  offline节点不在线  double_node_error节点ID不为一  break_path_error分布式层路径中断
+status:2    内部错误
+content:错误原因
 注释：
+现在的实现中任务“下发”成功就会直接返回成功 而不会管任务是否真的“投递”到了节点上 也不管节点是否真的执行了任务
+要确定节点动作了 现在的实现必须使用下面的API从节点状态高速缓存中获取节点状态 而高速缓存的刷新是由时间间隔的
+但是可以通过高速缓存中的刷新时间知道高速缓存是什么时候更新的
 
 
 
 
-
-===================：
+===================从缓存中获取设备控制器状态：
 编号：
 用户身份限制：=<
-请求content结构：
+请求content结构：{"controlid": ControlId}
 返回：
-status:
+status:0
 content:
-status:
-content:
-注释：
 
+{
+    "control_id":ControlId,
+    "flush_time":节点发送刷新消息的时间,   //格式:"YYYY-MM-DD HH:MM:SS.mmmmmm"
+    "flush_recive_time":高速缓存接收到刷新消息的时间,   //格式:"YYYY-MM-DD HH:MM:SS.mmmmmm"
+    {
+        "device_list":
+        [
+            {
+                "device_id":DeviceId,
+                "device_name":预定义在节点配置文件中的user-friendly名,
+                "device_type_id":设备类型id,
+                "state":可选状态,
+                "substate":可选子状态,
+                "now_state":现在状态,
+                "now_substate":现在子状态,
+            },
+            {...},
+            {...}.
+            ..............
+        ]
+    }
+}
 
-
-
-
-===================：
-编号：
-用户身份限制：=<
-请求content结构：
-返回：
-status:
-content:
-status:
-content:
+status:1    高速缓存层
+content:错误原因  dont_alive节点不存活（高速缓冲中没有）  timeout获取超时   
+status:2    内部错误
+content:错误原因
 注释：
 
 
