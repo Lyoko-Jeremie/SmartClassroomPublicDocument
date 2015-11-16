@@ -344,7 +344,7 @@ content:"异常失败"
 
 
 ===================：
-编号：获取指定房间的设备列表    % TODO 未完成
+编号：获取指定房间的设备列表
 用户身份限制：=<
 请求content结构：{"id": RoomId}
 返回：
@@ -354,7 +354,13 @@ content:（结果为一个列表）
 {"list":
     [
         {
-            "id":RoomID
+            "roomid": RoomID,
+            "controllerid": ControlId,
+            "deviceid": DeviceID,
+            "devicename": DeviceName,
+            "devicetype": DeviceType,
+            "status": Status,
+            "substatus": SubStatus,
         },
         {...},
         {...},
@@ -365,8 +371,8 @@ content:（结果为一个列表）
 status:1
 content:"异常失败"
 注释：
-没有这个房间或房间内没有设备会返回空列表
-
+1 没有这个房间或房间内没有设备会返回空列表
+2 获取的全都是静态信息
 
 
 
