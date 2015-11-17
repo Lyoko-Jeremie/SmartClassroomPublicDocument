@@ -316,8 +316,8 @@ content:"异常失败"
 
 
 ===================获取所有房间列表：
-编号：
-用户身份限制：=<
+编号：12
+用户身份限制：=<32
 请求content结构：不关心
 返回：
 status:0
@@ -342,10 +342,25 @@ content:"异常失败"
 
 
 
+===================添加房间：
+编号：13
+用户身份限制：=<1
+请求content结构：{"name",RoomName}
+返回：
+status:0
+content:null
+status:1
+content:"异常失败"
+注释：
 
-===================：
-编号：获取指定房间的设备列表
-用户身份限制：=<
+
+
+
+
+
+===================获取指定房间的设备列表：
+编号：14
+用户身份限制：=<32
 请求content结构：{"id": RoomId}
 返回：
 status:0
@@ -378,8 +393,8 @@ content:"异常失败"
 
 
 ===================获取未绑定设备列表：
-编号：
-用户身份限制：=<
+编号：15
+用户身份限制：=<1
 请求content结构：不关心
 返回：
 status:0
@@ -405,8 +420,8 @@ content:"异常失败"
 
 
 ===================绑定设备：
-编号：
-用户身份限制：=<
+编号：16
+用户身份限制：=<1
 请求content结构：{"roomid": RoomId,"controlid": ControlId}
 返回：
 status:0
@@ -420,8 +435,8 @@ content:"异常失败"
 
 
 ===================解绑定设备：
-编号：
-用户身份限制：=<
+编号：17
+用户身份限制：=<1
 请求content结构：{"controlid": ControlId}
 返回：
 status:0
@@ -435,8 +450,8 @@ content:"异常失败"
 
 
 ===================删除房间：
-编号：
-用户身份限制：=<
+编号：18
+用户身份限制：=<1
 请求content结构：{"roomid": RoomId}
 返回：
 status:0
@@ -450,8 +465,8 @@ content:"异常失败"
 
 
 ===================直接控制设备状态：
-编号：
-用户身份限制：=<
+编号：19
+用户身份限制：=<16
 请求content结构：
 {"control_id":ControlId,"device_id":DevicelId,"device_state":DeviceState,"device_sub_state":DeviceSubState}
 返回：
@@ -470,8 +485,8 @@ content:错误原因
 
 
 ===================从缓存中获取设备控制器状态：
-编号：
-用户身份限制：=<
+编号：20
+用户身份限制：=<32
 请求content结构：{"controlid": ControlId}
 返回：
 status:0
@@ -481,29 +496,56 @@ content:
     "control_id":ControlId,
     "flush_time":节点发送刷新消息的时间,   //格式:"YYYY-MM-DD HH:MM:SS.mmmmmm"
     "flush_recive_time":高速缓存接收到刷新消息的时间,   //格式:"YYYY-MM-DD HH:MM:SS.mmmmmm"
-    {
-        "device_list":
-        [
-            {
-                "device_id":DeviceId,
-                "device_name":预定义在节点配置文件中的user-friendly名,
-                "device_type_id":设备类型id,
-                "state":可选状态,
-                "substate":可选子状态,
-                "now_state":现在状态,
-                "now_substate":现在子状态,
-            },
-            {...},
-            {...}.
-            ..............
-        ]
-    }
+    "device_list":
+    [
+        {
+            "device_id":DeviceId,
+            "device_name":预定义在节点配置文件中的user-friendly名,
+            "device_type_id":设备类型id,
+            "state":可选状态,
+            "substate":可选子状态,
+            "now_state":现在状态,
+            "now_substate":现在子状态,
+        },
+        {...},
+        {...}.
+        ..............
+    ]
 }
 
 status:1    高速缓存层
 content:错误原因  dont_alive节点不存活（高速缓冲中没有）  timeout获取超时   
 status:2    内部错误
 content:错误原因
+注释：
+
+
+
+
+
+===================获取静态信息数据库刷新时间：
+编号：22
+用户身份限制：=<32
+请求content结构：不关心
+返回：
+status:0
+content:
+
+{
+    "list":
+    [
+        {
+            "table": 表名,
+            "time": 时间字串   SQL数据库使用now()函数得到的时间格式  例如：2015-11-16 22:05:45
+        },
+        {...},
+        {...}.
+        ..............
+    ]
+}
+
+status:1
+content:"异常失败"
 注释：
 
 
