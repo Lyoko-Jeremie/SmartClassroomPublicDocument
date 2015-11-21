@@ -158,7 +158,15 @@ content:{"user_info_array":[{"id":ID,"name":Name,"nick":Nick,"type":Type},{...},
 ===================发布留言：
 编号：4
 用户身份限制：=<32
-请求content结构：{"id": UserId, "name": UserName, "message": Message, "cid": ControllerId, "did": DeviceId, "type": 留言类型}
+请求content结构：
+{
+    "userId": UserId, 
+    "userName": UserName, 
+    "message": Message, 
+    "controllerId": ControllerId, 
+    "deviceId": DeviceId, 
+    "type": 留言类型
+}
 留言类型: 0 留言    1 报修
 返回：
 status:0
@@ -207,13 +215,14 @@ content:（结果为一个列表）
     [
         {
             "id":ID,
-            "userid":UserId,
-            "username":UserName,
+            "userId":UserId,
+            "userName":UserName,
             "message":Message,
             "state":State,
-            "controllerid":ControllerId,
-            "deviceid":DeviceId,
-            "deleted":DeletedFlag
+            "controllerId":ControllerId,
+            "deviceId":DeviceId,
+            "deleted":DeletedFlag,
+            "date":消息发布时间（插入数据库的时间） 数据库timestamp格式字串
         },
         {...},
         {...},
@@ -252,13 +261,14 @@ content:（结果为一个列表）
     [
         {
             "id":ID,
-            "userid":UserId,
-            "username":UserName,
+            "userId":UserId,
+            "userName":UserName,
             "message":Message,
             "state":State,
-            "controllerid":ControllerId,
-            "deviceid":DeviceId,
-            "deleted":DeletedFlag
+            "controllerId":ControllerId,
+            "deviceId":DeviceId,
+            "deleted":DeletedFlag,
+            "date":消息发布时间（插入数据库的时间） 数据库timestamp格式字串
         },
         {...},
         {...},
@@ -297,13 +307,14 @@ content:（结果为一个列表）
     [
         {
             "id":ID,
-            "userid":UserId,
-            "username":UserName,
+            "userId":UserId,
+            "userName":UserName,
             "message":Message,
             "state":State,
-            "controllerid":ControllerId,
-            "deviceid":DeviceId,
-            "deleted":DeletedFlag
+            "controllerId":ControllerId,
+            "deviceId":DeviceId,
+            "deleted":DeletedFlag,
+            "date":消息发布时间（插入数据库的时间） 数据库timestamp格式字串
         },
         {...},
         {...},
@@ -330,7 +341,7 @@ content:（结果为一个列表）
 {"rooms":
     [
         {
-            "id":RoomID,
+            "roomID":RoomID,
             "name":RoomName
         },
         {...},
@@ -373,13 +384,13 @@ content:（结果为一个列表）
 {"list":
     [
         {
-            "roomid": RoomID,
-            "controllerid": ControlId,
-            "deviceid": DeviceID,
-            "devicename": DeviceName,
+            "roomID": RoomID,
+            "controllerId": ControlId,
+            "deviceId": DeviceID,
+            "deviceName": DeviceName,
             "devicetype": DeviceType,
             "status": Status,
-            "substatus": SubStatus,
+            "substatus": SubStatus
         },
         {...},
         {...},
@@ -407,7 +418,7 @@ content:（结果为一个列表）
 {"list":
     [
         {
-            "id":RoomID
+            "roomID":RoomID
         },
         {...},
         {...},
@@ -426,7 +437,7 @@ content:"异常失败"
 ===================绑定设备：
 编号：16
 用户身份限制：=<2
-请求content结构：{"roomid": RoomId,"controlid": ControlId}
+请求content结构：{"roomID": RoomId,"controllerId": ControlId}
 返回：
 status:0
 content:null
@@ -441,7 +452,7 @@ content:"异常失败"
 ===================解绑定设备：
 编号：17
 用户身份限制：=<2
-请求content结构：{"controlid": ControlId}
+请求content结构：{"controllerId": ControlId}
 返回：
 status:0
 content:null
@@ -456,7 +467,7 @@ content:"异常失败"
 ===================删除房间：
 编号：18
 用户身份限制：=<2
-请求content结构：{"roomid": RoomId}
+请求content结构：{"roomID": RoomId}
 返回：
 status:0
 content:null
@@ -472,7 +483,7 @@ content:"异常失败"
 编号：19
 用户身份限制：=<16
 请求content结构：
-{"control_id":ControlId,"device_id":DevicelId,"device_state":DeviceState,"device_sub_state":DeviceSubState}
+{"controllerId":ControlId,"deviceId":DevicelId,"status":DeviceState,"substatus":DeviceSubState}
 返回：
 status:0
 content:null
@@ -491,21 +502,21 @@ content:错误原因
 ===================从缓存中获取设备控制器状态：
 编号：20
 用户身份限制：=<32
-请求content结构：{"controlid": ControlId}
+请求content结构：{"controllerId": ControlId}
 返回：
 status:0
 content:
 
 {
-    "control_id":ControlId,
+    "controllerId":ControlId,
     "flush_time":节点发送刷新消息的时间,   //格式:"YYYY-MM-DD HH:MM:SS.mmmmmm"
     "flush_recive_time":高速缓存接收到刷新消息的时间,   //格式:"YYYY-MM-DD HH:MM:SS.mmmmmm"
     "device_list":
     [
         {
-            "device_id":DeviceId,
-            "device_name":预定义在节点配置文件中的user-friendly名,
-            "device_type_id":设备类型id,
+            "deviceId":DeviceId,
+            "deviceName":预定义在节点配置文件中的user-friendly名,
+            "devicetype":设备类型id,
             "state":可选状态,
             "substate":可选子状态,
             "now_state":现在状态,
@@ -528,7 +539,7 @@ content:错误原因
 ===================删除设备：
 编号：21
 用户身份限制：=<1
-请求content结构：{"deviceid":DeviceId}
+请求content结构：{"deviceId":DeviceId}
 返回：
 status:0
 content:null
@@ -583,8 +594,8 @@ content:
     "list":
     [
         {
-            "roomid": RoomId,
-            "controllerid": ControllerId,
+            "roomID": RoomId,
+            "controllerId": ControllerId,
             "devicecount": 该控制器下对应的设备数量统计
         },
         {...},
@@ -606,7 +617,7 @@ content:"异常失败"
 ===================添加设备类型：
 编号：24
 用户身份限制：=<1
-请求content结构：{"typeid":TypeId,"status":Status,"sub_status":SubStatus,"name":Name}
+请求content结构：{"typeid":TypeId,"status":Status,"substatus":SubStatus,"name":Name}
 返回：
 status:0
 content:null
