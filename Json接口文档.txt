@@ -332,8 +332,6 @@ content:"异常失败"
 注释：
 
 
-====================================================从这里往下的接口还未测试可用性============================================
-
 
 ===================获取所有房间列表：
 编号：12
@@ -438,7 +436,6 @@ content:"异常失败"
 
 
 
-
 ===================绑定设备：
 编号：16
 用户身份限制：=<2
@@ -448,7 +445,9 @@ status:0
 content:null
 status:1
 content:"异常失败"
-注释：
+status:2
+content:"参数错误"
+注释：参数错误表示RoomId或者ControlId无效或者已经被以指定的方式绑定导致数据库中没有任何一行被修改
 
 
 
@@ -463,7 +462,10 @@ status:0
 content:null
 status:1
 content:"异常失败"
-注释：
+status:2
+content:"参数错误"
+注释：参数错误表示RoomId或者ControlId无效或者已经被以指定的方式绑定导致数据库中没有任何一行被修改
+
 
 
 
@@ -480,80 +482,7 @@ status:1
 content:"异常失败"
 注释：
 会自动解绑定该房间下的所有设备
-
-
-
-
-===================直接控制设备状态：
-编号：19
-用户身份限制：=<16
-请求content结构：
-{"controllerId":ControlId,"deviceId":DevicelId,"status":DeviceState,"substatus":DeviceSubState}
-返回：
-status:0
-content:null
-status:1    分布式层错误
-content:错误原因  offline节点不在线  double_node_error节点ID不为一  break_path_error分布式层路径中断
-status:2    内部错误
-content:错误原因
-注释：
-现在的实现中任务“下发”成功就会直接返回成功 而不会管任务是否真的“投递”到了节点上 也不管节点是否真的执行了任务
-要确定节点动作了 现在的实现必须使用下面的API从节点状态高速缓存中获取节点状态 而高速缓存的刷新是由时间间隔的
-但是可以通过高速缓存中的刷新时间知道高速缓存是什么时候更新的
-
-
-
-
-===================从缓存中获取设备控制器状态：
-编号：20
-用户身份限制：=<32
-请求content结构：{"controllerId": ControlId}
-返回：
-status:0
-content:
-
-{
-    "controllerId":ControlId,
-    "flush_time":节点发送刷新消息的时间,   //格式:"YYYY-MM-DD HH:MM:SS.mmmmmm"
-    "flush_recive_time":高速缓存接收到刷新消息的时间,   //格式:"YYYY-MM-DD HH:MM:SS.mmmmmm"
-    "device_list":
-    [
-        {
-            "deviceId":DeviceId,
-            "deviceName":预定义在节点配置文件中的user-friendly名,
-            "devicetype":设备类型id,
-            "state":可选状态,
-            "substate":可选子状态,
-            "now_state":现在状态,
-            "now_substate":现在子状态,
-        },
-        {...},
-        {...}.
-        ..............
-    ]
-}
-
-status:1    高速缓存层
-content:错误原因  dont_alive节点不存活（高速缓冲中没有）  timeout获取超时   
-status:2    内部错误
-content:错误原因
-注释：
-
-
-
-===================删除设备：
-编号：21
-用户身份限制：=<1
-请求content结构：{"deviceId":DeviceId}
-返回：
-status:0
-content:null
-status:1
-content:"异常失败"
-注释：
-注意 这是根管理员才能做的操作  随意删除设备会导致系统工作在未定义的状态下
-这个接口不应该暴露给除了系统维护以及安装部署人员之下的任何人
-
+正常情况下，不管有没有此房间都会成功
 
 
 
@@ -632,6 +561,86 @@ content:"异常失败"
 这个接口应该只在系统部署时使用  应该在部署设备前添加好所有配置在控制器中的类型  
 自动注册时注册不存在数据库中的设备类型会导致自动注册失败
 这个接口不应该暴露给除了系统维护以及安装部署人员之下的任何人
+
+
+
+
+
+====================================================从这里往下的接口还未测试可用性============================================
+
+
+
+
+===================直接控制设备状态：
+编号：19
+用户身份限制：=<16
+请求content结构：
+{"controllerId":ControlId,"deviceId":DevicelId,"status":DeviceState,"substatus":DeviceSubState}
+返回：
+status:0
+content:null
+status:1    分布式层错误
+content:错误原因  offline节点不在线  double_node_error节点ID不为一  break_path_error分布式层路径中断
+status:2    内部错误
+content:错误原因
+注释：
+现在的实现中任务“下发”成功就会直接返回成功 而不会管任务是否真的“投递”到了节点上 也不管节点是否真的执行了任务
+要确定节点动作了 现在的实现必须使用下面的API从节点状态高速缓存中获取节点状态 而高速缓存的刷新是由时间间隔的
+但是可以通过高速缓存中的刷新时间知道高速缓存是什么时候更新的
+
+
+
+
+===================从缓存中获取设备控制器状态：
+编号：20
+用户身份限制：=<32
+请求content结构：{"controllerId": ControlId}
+返回：
+status:0
+content:
+
+{
+    "controllerId":ControlId,
+    "flush_time":节点发送刷新消息的时间,   //格式:"YYYY-MM-DD HH:MM:SS.mmmmmm"
+    "flush_recive_time":高速缓存接收到刷新消息的时间,   //格式:"YYYY-MM-DD HH:MM:SS.mmmmmm"
+    "device_list":
+    [
+        {
+            "deviceId":DeviceId,
+            "deviceName":预定义在节点配置文件中的user-friendly名,
+            "devicetype":设备类型id,
+            "state":可选状态,
+            "substate":可选子状态,
+            "now_state":现在状态,
+            "now_substate":现在子状态,
+        },
+        {...},
+        {...}.
+        ..............
+    ]
+}
+
+status:1    高速缓存层
+content:错误原因  dont_alive节点不存活（高速缓冲中没有）  timeout获取超时   
+status:2    内部错误
+content:错误原因
+注释：
+
+
+
+===================删除设备：
+编号：21
+用户身份限制：=<1
+请求content结构：{"deviceId":DeviceId}
+返回：
+status:0
+content:null
+status:1
+content:"异常失败"
+注释：
+注意 这是根管理员才能做的操作  随意删除设备会导致系统工作在未定义的状态下
+这个接口不应该暴露给除了系统维护以及安装部署人员之下的任何人
+
 
 
 
