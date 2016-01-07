@@ -646,6 +646,45 @@ content:"异常失败"
 
 
 
+===================获取房间设备数量统计与控制器列表：
+编号：16#4000000E
+用户身份限制：=<32
+请求content结构：不关心
+返回：
+status:0
+content:
+
+{
+    "list":
+    [
+        {
+            "roomId": RoomId,
+            "roomName": RoomName,
+            "deviceCount": 该房间下对应的设备数量统计,
+            "controllerIdList":
+            [
+                "controllerId": ControllerId1,
+                "controllerId": ControllerId2,
+                ..............
+            ]
+        },
+        {...},
+        {...}.
+        ..............
+    ]
+}
+
+status:1
+content:"异常失败"
+注释：
+controllerIdList那个列表，因为Erlang对于纯数字list会自动当作字符串处理，所以必须以对象列表的形式操作
+
+
+
+
+
+
+
 ===================：
 编号：
 用户身份限制：=<
