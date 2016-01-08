@@ -421,13 +421,20 @@ content:（结果为一个列表）
 {"list":
     [
         {
-            "roomID":RoomID
+            "roomID": RoomID,
+            "controllerId": ControlId,
+            "deviceId": DeviceID,
+            "deviceName": DeviceName,
+            "devicetype": DeviceType,
+            "status": Status,
+            "substatus": SubStatus
         },
         {...},
         {...},
         .........
     ]
 }
+
 
 status:1
 content:"异常失败"
