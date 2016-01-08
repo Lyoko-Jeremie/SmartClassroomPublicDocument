@@ -598,6 +598,39 @@ controllerIdList那个列表，因为Erlang对于纯数字list会自动当作字
 
 
 
+===================批量添加房间：
+编号：25
+用户身份限制：=<2
+请求content结构：{"namelist",[RoomName1,RoomName2,RoomName3,.......]}
+返回：
+status:0
+content:
+
+{
+    "oklist":
+    [
+        RoomName1,
+        RoomName2,
+        RoomName3,
+        .....
+    ],
+    "errorlist":
+    [
+        RoomName1,
+        RoomName2,
+        RoomName3,
+        .....
+    ]
+}
+
+注释：
+
+
+
+
+
+
+
 
 
 ====================================================从这里往下的接口还未测试可用性============================================
