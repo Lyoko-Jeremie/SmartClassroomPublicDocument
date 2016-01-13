@@ -362,7 +362,7 @@ content:"异常失败"
 
 ===================添加房间：
 编号：13
-用户身份限制：=<2
+用户身份限制：=<1
 请求content结构：{"name",RoomName}
 返回：
 status:0
@@ -436,7 +436,7 @@ content:"异常失败"
 
 ===================绑定设备：
 编号：16
-用户身份限制：=<2
+用户身份限制：=<1
 请求content结构：{"roomID": RoomId,"controllerId": ControlId}
 返回：
 status:0
@@ -453,7 +453,7 @@ content:"参数错误"
 
 ===================解绑定设备：
 编号：17
-用户身份限制：=<2
+用户身份限制：=<1
 请求content结构：{"controllerId": ControlId}
 返回：
 status:0
@@ -471,7 +471,7 @@ content:"参数错误"
 
 ===================删除房间：
 编号：18
-用户身份限制：=<2
+用户身份限制：=<1
 请求content结构：{"roomID": RoomId}
 返回：
 status:0
@@ -645,10 +645,14 @@ content:
 {"controllerId":ControlId,"deviceId":DevicelId,"status":DeviceState,"substatus":DeviceSubState}
 返回：
 status:0
-content:null
-status:1    分布式层错误
-content:错误原因  offline节点不在线  double_node_error节点ID不为一  break_path_error分布式层路径中断
-status:2    内部错误
+content:{"UniqueID": UniqueID}		UniqueID为这个控制任务的内部ID
+status:1
+content:offline				节点不在线
+status:2
+content:double_node_error		节点ID不为一
+status:3
+content:break_path_error		分布式层路径中断
+status:4    				其他内部错误
 content:错误原因
 注释：
 现在的实现中任务“下发”成功就会直接返回成功 而不会管任务是否真的“投递”到了节点上 也不管节点是否真的执行了任务
@@ -687,10 +691,14 @@ content:
     ]
 }
 
-status:1    高速缓存层
-content:错误原因  dont_alive节点不存活（高速缓冲中没有）  timeout获取超时   
-status:2    内部错误
+
+status:1
+content:dont_alive		节点不存活（高速缓冲中没有）
+status:2
+content:timeout			获取超时
+status:3    			内部错误
 content:错误原因
+
 注释：
 
 
