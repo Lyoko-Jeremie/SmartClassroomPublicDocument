@@ -286,6 +286,35 @@ content:"异常失败"
 注释：
 
 
+===================获取指定留言：
+编号：16#4000000E
+用户身份限制：=<32
+请求content结构：{"id": ID}        留言的ID
+返回：
+status:0
+content:（结果为一个列表，即使只有一个留言或者没有指定ID的留言）
+
+{"messages":
+    [
+        {
+            "id":ID,
+            "userId":UserId,
+            "userName":UserName,
+            "message":Message,
+            "state":State,
+            "controllerId":ControllerId,
+            "deviceId":DeviceId,
+            "deleted":DeletedFlag,
+            "date":消息发布时间（插入数据库的时间） 数据库timestamp格式字串
+        }
+    ]
+}
+
+status:1
+content:"异常失败"
+注释：
+
+
 
 ===================设定指定ID的留言的状态：
 编号：10
